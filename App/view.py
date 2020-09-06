@@ -38,9 +38,12 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-
-
-
+libros_tags = "Data/book_tags.csv"
+libros_tags_pequeño = "Data/book_tags-small.csv"
+libros_tags_mediano = "Data/book_tags-medium.csv"
+libros = "Data/books.csv"
+libros_pequeño = "Data/books-small.csv"
+libros_mediano = "Data/books_medium.csv"
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
