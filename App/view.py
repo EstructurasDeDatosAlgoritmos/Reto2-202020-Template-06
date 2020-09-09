@@ -53,3 +53,43 @@ operación seleccionada.
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+def printMenu():
+    print("Bienvenido")
+    print("1- Cargar Datos")
+    print("2- Descubrir productoras de cine")
+    print("3- Conocer a un director")
+    print("4- Conocer a un actor ")
+    print("5- Entender un género cinematográfico")
+    print("6-  Encontrar películas por país")
+    print("0- Salir")
+
+
+"""
+Menu principal
+"""
+
+while True:
+    printMenu()
+    inputs = input('Seleccione una opción para continuar\n')
+
+    if int(inputs[0]) == 1:
+        print("Inicializando Catálogo ....")
+        # cont es el controlador que se usará de acá en adelante
+        cont = controller.initCatalog()
+
+    elif int(inputs[0]) == 2:
+        pass
+
+    elif int(inputs[0]) == 3:
+        pass
+
+    elif int(inputs[0]) == 4:
+        pass
+
+    elif int(inputs[0]) == 5:
+        pass
+    elif int(inputs[0]) == 6:
+        pass
+    else:
+        sys.exit(0)
+sys.exit(0)
