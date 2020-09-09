@@ -38,8 +38,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-
-
+Castingfile = 'Data/MoviesCastingRaw-small.csv'
+Detailsfile = 'Data/SmallMoviesDetailsCleaned.csv'
 
 
 # ___________________________________________________
@@ -55,12 +55,13 @@ operación seleccionada.
 # ___________________________________________________
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar Datos")
-    print("2- Descubrir productoras de cine")
-    print("3- Conocer a un director")
-    print("4- Conocer a un actor ")
-    print("5- Entender un género cinematográfico")
-    print("6-  Encontrar películas por país")
+    print("1- Inicializar Catálogo")
+    print("2- Cargar Datos")
+    print("3- Descubrir productoras de cine")
+    print("4- Conocer a un director")
+    print("5- Conocer a un actor ")
+    print("6- Entender un género cinematográfico")
+    print("7-  Encontrar películas por país")
     print("0- Salir")
 
 
@@ -78,7 +79,11 @@ while True:
         cont = controller.initCatalog()
 
     elif int(inputs[0]) == 2:
-        pass
+        print("Cargando información de los archivos ....")
+        controller.loadData(cont, Detailsfile, Castingfile)
+        print('Peliculas cargadas: ' + str(controller.booksSize(cont)))
+        
+        
 
     elif int(inputs[0]) == 3:
         pass
