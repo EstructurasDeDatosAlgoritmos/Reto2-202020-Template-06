@@ -82,7 +82,7 @@ def loadCasting(catalog, Detailsfile):
 def moviesSize(catalog):
     """Numero de peliculas leidas
     """
-    return model.booksSize(catalog)
+    return model.moviesSize(catalog)
 
 def firstANDlast_details(catalog):
     """Detalles de la primera y ultima pelicula 

@@ -68,8 +68,8 @@ def addMovie(catalog, Movie):
     adicionalmente lo guarda en un Map usando como llave su Id.
     """
     lt.addLast(catalog['movies'], Movie)
-    print(Movie)
-    mp.put(catalog['moviesIds'], Movie["id"], Movie)
+    
+    #mp.put(catalog['moviesIds'], Movie["id"], Movie)
 
 
 # ==============================
@@ -78,25 +78,29 @@ def addMovie(catalog, Movie):
 
 def getFirstAndLastDetails(catalog):
     lista_movies = catalog['movies']
+    
+    first = lt.firstElement(lista_movies)
+    last = lt.lastElement(lista_movies)
+    
     #Titulo
-    f_name = lt.firstElement(lista_movies["original_title"])
-    l_name = lt.firstElement(lista_movies["original_title"])
+    f_name = first["original_title"]
+    l_name = last["original_title"]
+    
     #Fecha
-    f_date = lt.firstElement(lista_movies["release_date"])
-    l_date = lt.lastElement(lista_movies["release_date"])
+    f_date = first["release_date"]
+    l_date = last["release_date"]
     #Average
-    f_average = lt.firstElement(lista_movies["vote_average"])
-    l_average = lt.lastElement(lista_movies["vote_average"])
+    f_average = first["vote_average"]
+    l_average = last["vote_average"]
     #Count
-    f_count = lt.firstElement(lista_movies["vote_count"])
-    l_count = lt.lastElement(lista_movies["vote_count"])
+    f_count = first["vote_count"]
+    l_count = last["vote_count"]
     #Promedio
-    #f_promedio = float(f_average) / int(f_count)
-    #l_promedio = float(l_average) / int(l_count)
+    f_promedio = float(f_average) / int(f_count)
+    l_promedio = float(l_average) / int(l_count)
     #Language
-    f_language = lt.firstElement(lista_movies["spoken_languages"])
-    l_language = lt.lastElement(lista_movies["spoken_languages"])
-
+    f_language = first["spoken_languages"]
+    l_language = last["spoken_languages"]
     First = "Primera pelicula:\n" + "Titulo:" + str(f_name) + "\n" + "Fecha:" + str(f_date) + "Promedio:" + str(f_average) + "\n" + "Numero de votos:" + str(f_count) + "\n" + "Idioma:" + str(f_language) + "\n\n"
     Last = "Ultima pelicula:\n" + "Titulo:" + str(l_name) + "\n" + "Fecha:" + str(l_date) + "Promedio:" + str(l_average) + "\n" + "Numero de votos:" + str(l_count) + "\n" + "Idioma:" + str(l_language) + "\n\n"
     Details = First + Last
