@@ -38,8 +38,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-
-
+Castingfile = 'Data/MoviesCastingRaw-small.csv'
+Detailsfile = 'Data/SmallMoviesDetailsCleaned.csv'
 
 
 # ___________________________________________________
@@ -53,3 +53,49 @@ operación seleccionada.
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+def printMenu():
+    print("Bienvenido")
+    print("1- Inicializar Catálogo")
+    print("2- Cargar Datos")
+    print("3- Descubrir productoras de cine")
+    print("4- Conocer a un director")
+    print("5- Conocer a un actor ")
+    print("6- Entender un género cinematográfico")
+    print("7-  Encontrar películas por país")
+    print("0- Salir")
+
+
+"""
+Menu principal
+"""
+
+while True:
+    printMenu()
+    inputs = input('Seleccione una opción para continuar\n')
+
+    if int(inputs[0]) == 1:
+        print("Inicializando Catálogo ....")
+        # cont es el controlador que se usará de acá en adelante
+        cont = controller.initCatalog()
+
+    elif int(inputs[0]) == 2:
+        print("Cargando información de los archivos ....")
+        controller.loadData(cont, Detailsfile, Castingfile)
+        print('Peliculas cargadas: ' + str(controller.moviesSize(cont)))
+        print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
+        
+        
+
+    elif int(inputs[0]) == 3:
+        pass
+
+    elif int(inputs[0]) == 4:
+        pass
+
+    elif int(inputs[0]) == 5:
+        pass
+    elif int(inputs[0]) == 6:
+        pass
+    else:
+        sys.exit(0)
+sys.exit(0)
