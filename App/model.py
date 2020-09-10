@@ -35,12 +35,40 @@ es decir contiene los modelos con los datos en memoria
 # API del TAD Catalogo de Libros
 # -----------------------------------------------------
 
+def newCatalog():
+    """ Inicializa el catálogo de libros
+
+    Crea una lista vacia para guardar todos los libros
+
+    Se crean indices (Maps) por los siguientes criterios:
+    Autores
+    ID libros
+    Tags
+    Año de publicacion
+
+    Retorna el catalogo inicializado.
+    """
+    catalog = {'movies': None,}
+
+    catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
+
+    return catalog
+
 
 
 # Funciones para agregar informacion al catalogo
 
 
-
+def addMovie(catalog, Movie):
+    """
+    Esta funcion adiciona un libro a la lista de libros,
+    adicionalmente lo guarda en un Map usando como llave su Id.
+    Finalmente crea una entrada en el Map de años, para indicar que este
+    libro fue publicaco en ese año.
+    """
+    lt.addLast(catalog['movies'], Movie)
+#    mp.put(catalog['bookIds'], book['goodreads_book_id'], book)
+ #   addBookYear(catalog, book)
 # ==============================
 # Funciones de consulta
 # ==============================
@@ -50,5 +78,17 @@ es decir contiene los modelos con los datos en memoria
 # ==============================
 # Funciones de Comparacion
 # ==============================
+
+def compareMoviesIds(id1, id2):
+    """
+    Compara dos ids de peliculas
+    """
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+
 
 
