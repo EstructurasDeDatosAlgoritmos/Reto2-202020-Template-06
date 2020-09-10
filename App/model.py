@@ -48,49 +48,90 @@ def newCatalog():
     Retorna el catalogo inicializado.
     """
     catalog = {'movies': None,
-               'genere': None,
-               'date': None,
-               'count': None,
-               'average': None,
-               'country': None}
+               'moviesIds': None}
 
-    catalog['books'] = lt.newList('SINGLE_LINKED', compareBookIds)
-    catalog['bookIds'] = mp.newMap(200,
+    catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
+    catalog['moviesIds'] = mp.newMap(200,
                                    maptype='PROBING',
                                    loadfactor=0.4,
-                                   comparefunction=compareMapBookIds)
-    catalog['authors'] = mp.newMap(200,
-                                   maptype='PROBING',
-                                   loadfactor=0.4,
-                                   comparefunction=compareAuthorsByName)
-    catalog['tags'] = mp.newMap(1000,
-                                maptype='CHAINING',
-                                loadfactor=0.7,
-                                comparefunction=compareTagNames)
-    catalog['tagIds'] = mp.newMap(1000,
-                                  maptype='CHAINING',
-                                  loadfactor=0.7,
-                                  comparefunction=compareTagIds)
-    catalog['years'] = mp.newMap(500,
-                                 maptype='CHAINING',
-                                 loadfactor=0.7,
-                                 comparefunction=compareMapYear)
-
+                                   comparefunction=compareMapMoviesIds)
     return catalog
 
 
-# Funciones para agregar informacion al catalogo
 
+
+
+# Funciones para agregar informacion al catalogo
+def addMovie(catalog, Movie):
+    """
+    Esta funcion adiciona una pelicula a la lista de peliculas,
+    adicionalmente lo guarda en un Map usando como llave su Id.
+    """
+    lt.addLast(catalog['movies'], Movie)
+    print(Movie)
+    mp.put(catalog['moviesIds'], Movie["id"], Movie)
 
 
 # ==============================
 # Funciones de consulta
 # ==============================
 
+def getFirstAndLastDetails(catalog):
+    lista_movies = catalog['movies']
+    #Titulo
+    f_name = lt.firstElement(lista_movies["original_title"])
+    l_name = lt.firstElement(lista_movies["original_title"])
+    #Fecha
+    f_date = lt.firstElement(lista_movies["release_date"])
+    l_date = lt.lastElement(lista_movies["release_date"])
+    #Average
+    f_average = lt.firstElement(lista_movies["vote_average"])
+    l_average = lt.lastElement(lista_movies["vote_average"])
+    #Count
+    f_count = lt.firstElement(lista_movies["vote_count"])
+    l_count = lt.lastElement(lista_movies["vote_count"])
+    #Promedio
+    #f_promedio = float(f_average) / int(f_count)
+    #l_promedio = float(l_average) / int(l_count)
+    #Language
+    f_language = lt.firstElement(lista_movies["spoken_languages"])
+    l_language = lt.lastElement(lista_movies["spoken_languages"])
 
+    First = "Primera pelicula:\n" + "Titulo:" + str(f_name) + "\n" + "Fecha:" + str(f_date) + "Promedio:" + str(f_average) + "\n" + "Numero de votos:" + str(f_count) + "\n" + "Idioma:" + str(f_language) + "\n\n"
+    Last = "Ultima pelicula:\n" + "Titulo:" + str(l_name) + "\n" + "Fecha:" + str(l_date) + "Promedio:" + str(l_average) + "\n" + "Numero de votos:" + str(l_count) + "\n" + "Idioma:" + str(l_language) + "\n\n"
+    Details = First + Last
+    return Details  
+
+def moviesSize(catalog):
+    """
+    Número de libros en el catago
+    """
+    return lt.size(catalog['movies'])
 
 # ==============================
 # Funciones de Comparacion
 # ==============================
 
+def compareMoviesIds(id1, id2):
+    """
+    Compara dos ids de libros
+    """
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
 
+def compareMapMoviesIds(id, entry):
+    """
+    Compara dos ids de libros, id es un identificador
+    y entry una pareja llave-valor
+    """
+    identry = me.getKey(entry)
+    if (int(id) == int(identry)):
+        return 0
+    elif (int(id) > int(identry)):
+        return 1
+    else:
+        return -1

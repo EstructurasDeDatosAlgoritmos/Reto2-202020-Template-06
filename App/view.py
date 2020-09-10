@@ -81,7 +81,8 @@ while True:
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
         controller.loadData(cont, Detailsfile, Castingfile)
-        print('Peliculas cargadas: ' + str(controller.booksSize(cont)))
+        print('Peliculas cargadas: ' + str(controller.moviesSize(cont)))
+        print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
         
         
 
