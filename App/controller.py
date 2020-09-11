@@ -67,7 +67,7 @@ def loadDetails(catalog, Detailsfile):
       autor, se crea una lista con sus libros
     """
     moviesfile = cf.data_dir + Detailsfile
-    input_file = csv.DictReader(open(Detailsfile, encoding='utf-8-sig'))
+    input_file = csv.DictReader(open(Detailsfile, encoding='utf-8-sig'), delimiter=";")
     for movie in input_file:
         model.addMovie(catalog, movie)
         
