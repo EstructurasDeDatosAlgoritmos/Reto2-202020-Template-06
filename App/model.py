@@ -69,7 +69,7 @@ def addMovie(catalog, Movie):
     """
     lt.addLast(catalog['movies'], Movie)
     
-    #mp.put(catalog['moviesIds'], Movie["id"], Movie)
+    mp.put(catalog['moviesIds'], Movie["id"], Movie)
 
 
 # ==============================
@@ -101,8 +101,8 @@ def getFirstAndLastDetails(catalog):
     #Language
     f_language = first["spoken_languages"]
     l_language = last["spoken_languages"]
-    First = "Primera pelicula:\n" + "Titulo:" + str(f_name) + "\n" + "Fecha:" + str(f_date) + "Promedio:" + str(f_average) + "\n" + "Numero de votos:" + str(f_count) + "\n" + "Idioma:" + str(f_language) + "\n\n"
-    Last = "Ultima pelicula:\n" + "Titulo:" + str(l_name) + "\n" + "Fecha:" + str(l_date) + "Promedio:" + str(l_average) + "\n" + "Numero de votos:" + str(l_count) + "\n" + "Idioma:" + str(l_language) + "\n\n"
+    First = "\n" +"Primera pelicula:\n" + "Titulo:" + str(f_name) + "\n" + "Fecha:" + str(f_date) + "\n" + "Promedio:" + str(f_average) + "\n" + "Numero de votos:" + str(f_count) + "\n" + "Idioma:" + str(f_language) + "\n\n"
+    Last = "\n" +"Ultima pelicula:\n" + "Titulo:" + str(l_name) + "\n" + "Fecha:" + str(l_date) + "\n" + "Promedio:" + str(l_average) + "\n" + "Numero de votos:" + str(l_count) + "\n" + "Idioma:" + str(l_language) + "\n\n"
     Details = First + Last
     return Details  
 
