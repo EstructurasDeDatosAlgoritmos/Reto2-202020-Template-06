@@ -104,6 +104,17 @@ def addMovie(catalog, Movie):
 
 
 
+# Funciones para agregar informacion al catalogo
+def addMovie(catalog, Movie):
+    """
+    Esta funcion adiciona una pelicula a la lista de peliculas,
+    adicionalmente lo guarda en un Map usando como llave su Id.
+    """
+    lt.addLast(catalog['movies'], Movie)
+    
+    mp.put(catalog['moviesIds'], Movie["id"], Movie)
+
+
 # ==============================
 # Funciones de consulta
 # ==============================
@@ -195,3 +206,15 @@ def compareCompaniesByName(keyname, company):
     else:
         return -1
 
+def compareMapMoviesIds(id, entry):
+    """
+    Compara dos ids de libros, id es un identificador
+    y entry una pareja llave-valor
+    """
+    identry = me.getKey(entry)
+    if (int(id) == int(identry)):
+        return 0
+    elif (int(id) > int(identry)):
+        return 1
+    else:
+        return -1
