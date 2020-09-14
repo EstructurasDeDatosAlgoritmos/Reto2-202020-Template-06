@@ -36,6 +36,7 @@ recae sobre el controlador.
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
+
 def initCatalog():
     """
     Llama la funcion de inicializacion del catalogo del modelo.
@@ -45,32 +46,55 @@ def initCatalog():
     return catalog
 
 
-
-
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-def loadData(catalog, booksfile, tagsfile, booktagsfile):
+
+def loadData(catalog, Detailsfile, Castingfile):
     """
     Carga los datos de los archivos en el modelo
     """
-    loadCasting(catalog, booksfile)
-    loadDetails(catalog, tagsfile)
+    loadDetails(catalog, Detailsfile)
+    loadCasting(catalog, Castingfile)
+    
 
-def loadMovies(catalog, Castingfile):
+def loadDetails(catalog, Detailsfile):
     """
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
     - Por cada libro se encuentran sus autores y por cada
       autor, se crea una lista con sus libros
     """
-    Castingfile = cf.data_dir + Castingfile
-    input_file = csv.DictReader(open(Castingfile,encoding="utf-8-sig"))
-    for book in input_file:
-        model.addBook(catalog, book)
-        authors = book['authors'].split(",")  # Se obtienen los autores
-        for author in authors:
-            model.addBookAuthor(catalog, author.strip(), book)  
-            
+    moviesfile = cf.data_dir + Detailsfile
+    input_file = csv.DictReader(open(Detailsfile, encoding='utf-8-sig'), delimiter=";")
+    for movie in input_file:
+        model.addMovie(catalog, movie)
+        companies = movie['production_companies'].split(",")  # Se obtienen los autores
+        for company in companies:
+            model.addMovieCompany(catalog, company.strip(), movie)
+        
 
+def loadCasting(catalog, Detailsfile):
+    pass
+
+# ___________________________________________________
+#  Funciones para consultas
+# ___________________________________________________
+
+def moviesSize(catalog):
+    """Numero de peliculas leidas
+    """
+    return model.moviesSize(catalog)
+
+def firstANDlast_details(catalog):
+    """Detalles de la primera y ultima pelicula 
+    """
+    return model.getFirstAndLastDetails(catalog)
+
+def getMoviesByCompany(catalog, company_name):
+    """
+    Retorna los libros de un autor
+    """
+    companyinfo = model.getMoviesByCompany(catalog, company_name)
+    return companyinfo
