@@ -102,6 +102,7 @@ while True:
     elif int(inputs[0]) == 3:
         t1_start = process_time() #Inicio de cronometro 
         
+        
         t1_stop = process_time() #tiempo final
         print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
     elif int(inputs[0]) == 4:
