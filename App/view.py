@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller
+from time import process_time 
 assert config
 
 """
@@ -99,11 +100,11 @@ while True:
            
 
     elif int(inputs[0]) == 3:
+        t1_start = process_time() #Inicio de cronometro 
+        
         company_name=input("ingrese el nombre de la productora: \n")
         company_info=controller.getMoviesByCompany(cont,company_name)
         printCompanyData(company_info)
-
-        pass
 
     elif int(inputs[0]) == 4:
         pass
