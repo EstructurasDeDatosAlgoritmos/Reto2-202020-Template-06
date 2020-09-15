@@ -72,7 +72,7 @@ def loadDetails(catalog, Detailsfile):
         model.addMovie(catalog, movie)
         
 
-def loadCasting(catalog, Detailsfile):
+def loadCasting(catalog, Castingfile):
     pass
 
 # ___________________________________________________
