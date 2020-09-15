@@ -49,7 +49,20 @@ Detailsfile = 'Data/SmallMoviesDetailsCleaned.csv'
 #  el controlador.
 # ___________________________________________________
 
-
+def printCompanyData(company_name):
+    """
+    Imprime los libros de un autor determinado
+    """
+    if company_name:
+        print('compañia encontrado: ' + company_name['name'])
+        print('Promedio: ' + str(company_name['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(company_name['movies'])))
+        iterator = it.newIterator(company_name['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el autor')
 
 # ___________________________________________________
 #  Menu principal
@@ -84,8 +97,7 @@ while True:
         controller.loadData(cont, Detailsfile, Castingfile)
         print('Peliculas cargadas: ' + str(controller.moviesSize(cont)))
         print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
-        
-        
+           
 
     elif int(inputs[0]) == 3:
         t1_start = process_time() #Inicio de cronometro 

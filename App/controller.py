@@ -70,6 +70,9 @@ def loadDetails(catalog, Detailsfile):
     input_file = csv.DictReader(open(Detailsfile, encoding='utf-8-sig'), delimiter=";")
     for movie in input_file:
         model.addMovie(catalog, movie)
+        companies = movie['production_companies'].split(",")  # Se obtienen los autores
+        for company in companies:
+            model.addMovieCompany(catalog, company.strip(), movie)
         
 
 def loadCasting(catalog, Castingfile):
@@ -88,3 +91,10 @@ def firstANDlast_details(catalog):
     """Detalles de la primera y ultima pelicula 
     """
     return model.getFirstAndLastDetails(catalog)
+
+def getMoviesByCompany(catalog, company_name):
+    """
+    Retorna los libros de un autor
+    """
+    companyinfo = model.getMoviesByCompany(catalog, company_name)
+    return companyinfo
