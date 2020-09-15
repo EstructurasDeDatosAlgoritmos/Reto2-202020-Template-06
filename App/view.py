@@ -101,7 +101,7 @@ while True:
 
     elif int(inputs[0]) == 3:
         t1_start = process_time() #Inicio de cronometro 
-        company_name=input("ingrese el nombre de la productora: \n")
+        company_name=input("Ingrese el nombre de la productora: \n")
         company_info=controller.getMoviesByCompany(cont,company_name)
         printCompanyData(company_info)
         t1_stop = process_time() #tiempo final
