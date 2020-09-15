@@ -75,7 +75,7 @@ def loadDetails(catalog, Detailsfile):
             model.addMovieCompany(catalog, company.strip(), movie)
         
 
-def loadCasting(catalog, Detailsfile):
+def loadCasting(catalog, Castingfile):
     pass
 
 # ___________________________________________________
