@@ -64,7 +64,7 @@ def loadData(catalog, Detailsfile, Castingfile):
     loadCasting(catalog, Castingfile)
     t1_stop = process_time()
     print ("Tiempo de ejecución: ",t1_stop-t1_start, " segundos.")
-
+    
 def loadDetails(catalog, Detailsfile):
     """
     Carga cada una de las lineas del archivo de libros.
@@ -72,7 +72,6 @@ def loadDetails(catalog, Detailsfile):
     - Por cada libro se encuentran sus autores y por cada
       autor, se crea una lista con sus libros
     """
-
     moviesfile = cf.data_dir + Detailsfile
     input_file = csv.DictReader(open(Detailsfile, encoding='utf-8-sig'), delimiter=";")
     for movie in input_file:
@@ -80,7 +79,6 @@ def loadDetails(catalog, Detailsfile):
         companies = movie['production_companies'].split(",")  # Se obtienen los autores
         for company in companies:
             model.addMovieCompany(catalog, company.strip(), movie)
-
         
 
 def loadCasting(catalog, Castingfile):
@@ -105,5 +103,4 @@ def getMoviesByCompany(catalog, company_name):
     Retorna los libros de un autor
     """
     companyinfo = model.getMoviesByCompany(catalog, company_name)
-    t1_stop = process_time() #Inicio de cronometro
     return companyinfo
