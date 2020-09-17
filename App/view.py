@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller
+from time import process_time 
 assert config
 
 """
@@ -38,12 +39,9 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-libros_tags = "Data/book_tags.csv"
-libros_tags_pequeño = "Data/book_tags-small.csv"
-libros_tags_mediano = "Data/book_tags-medium.csv"
-libros = "Data/books.csv"
-libros_pequeño = "Data/books-small.csv"
-libros_mediano = "Data/books_medium.csv"
+Castingfile = 'Data/MoviesCastingRaw-small.csv'
+Detailsfile = 'Data/SmallMoviesDetailsCleaned.csv'
+
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
@@ -51,8 +49,73 @@ libros_mediano = "Data/books_medium.csv"
 #  el controlador.
 # ___________________________________________________
 
-
+def printCompanyData(company_name):
+    """
+    Imprime los libros de un autor determinado
+    """
+    if company_name:
+        print('Compañia encontrado: ' + company_name['name'])
+        print('Promedio: ' + str(company_name['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(company_name['movies'])))
+        iterator = it.newIterator(company_name['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el autor')
 
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+def printMenu():
+    print("Bienvenido")
+    print("1- Inicializar Catálogo")
+    print("2- Cargar Datos")
+    print("3- Descubrir productoras de cine")
+    print("4- Conocer a un director")
+    print("5- Conocer a un actor ")
+    print("6- Entender un género cinematográfico")
+    print("7-  Encontrar películas por país")
+    print("0- Salir")
+
+
+"""
+Menu principal
+"""
+
+while True:
+    printMenu()
+    inputs = input('Seleccione una opción para continuar\n')
+
+    if int(inputs[0]) == 1:
+        print("Inicializando Catálogo ....")
+        # cont es el controlador que se usará de acá en adelante
+        cont = controller.initCatalog()
+
+    elif int(inputs[0]) == 2:
+        print("Cargando información de los archivos ....")
+        controller.loadData(cont, Detailsfile, Castingfile)
+        print('Peliculas cargadas: ' + str(controller.moviesSize(cont)))
+        print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
+           
+
+    elif int(inputs[0]) == 3:
+        t1_start = process_time() #Inicio de cronometro
+        company_name=input("ingrese el nombre de la productora: \n")
+        company_info=controller.getMoviesByCompany(cont,company_name)
+        printCompanyData(company_info) 
+        
+        t1_stop = process_time() #tiempo final
+        print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+
+    elif int(inputs[0]) == 4:
+        pass
+
+    elif int(inputs[0]) == 5:
+        pass
+    elif int(inputs[0]) == 6:
+        pass
+    else:
+        print ("Muchas gracias. ")
+        sys.exit(0)
+sys.exit(0)
