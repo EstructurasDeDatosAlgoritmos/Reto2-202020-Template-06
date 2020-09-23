@@ -107,6 +107,21 @@ def printCountryData(country):
     else:
         print('No se encontro el director')
 
+def printDirectorData(director_name):
+    """
+    Imprime las peliculas de un director determinado
+    """
+    if director_name:
+        print('director encontrado: ' + director_name['name'])
+        print('Promedio: ' + str(director_name['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(director_name['movies'])))
+        iterator = it.newIterator(director_name['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el director')
+
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
@@ -144,6 +159,7 @@ while True:
            
 
     elif int(inputs[0]) == 3:
+
         t1_start = process_time() #Inicio de cronometro
         company_name=input("ingrese el nombre de la productora: \n")
         company_info=controller.getMoviesByCompany(cont,company_name)
@@ -154,6 +170,7 @@ while True:
         director_info=controller.getMoviesByDirector(cont,director_name)
         printDirectorData(director_info)
  
+
     elif int(inputs[0]) == 5:
         pass
 

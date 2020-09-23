@@ -50,6 +50,7 @@ def newCatalog():
                "director":None,
                "genres": None,
                "countries": None}
+               "director":None}
     catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
     catalog['companies'] = mp.newMap(200,
                                    maptype='CHAINING',
@@ -204,6 +205,28 @@ def addMovieCountry(catalog, country_name, movie):
         country['average_rating'] = (country_avg + float(movie_avg)) / 2
 
 
+def addMovieDirector(catalog, director_name, movie):
+    """
+    Esta función adiciona una pelicula a la lista de peliculas publicados
+    por un director.
+    Cuando se adiciona la pelicula se actualiza el promedio de dicho director
+    """
+    directors = catalog['directors']
+    existauthor = mp.contains(directors, director_name)
+    if existauthor:
+        entry = mp.get(directors, director_name)
+        director = me.getValue(entry)
+    else:
+        director = newDirector(director_name)
+        mp.put(directors, director_name, director)
+    lt.addLast(director['movies'], movie)
+
+    director_avg = director['average_rating']
+    movie_avg=movie["vote_average"]
+    if (director_avg == 0.0):
+        director['average_rating'] = float(movie_avg)
+    else:
+        director['average_rating'] = (director_avg + float(movie_avg)) / 2
 
 
 # Funciones para agregar informacion al catalogo

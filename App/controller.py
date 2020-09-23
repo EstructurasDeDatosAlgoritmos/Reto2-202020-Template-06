@@ -150,3 +150,4 @@ def getMoviesByCountry(catalog, country_name):
 def getMoviesByGenres(catalog, genres_name):
     genreinfo = model.getMoviesByGenres(catalog, genres_name)
     return genreinfo
+
