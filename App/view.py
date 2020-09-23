@@ -54,7 +54,7 @@ def printCompanyData(company_name):
     Imprime los libros de un autor determinado
     """
     if company_name:
-        print('compañia encontrado: ' + company_name['name'])
+        print('Compañia encontrado: ' + company_name['name'])
         print('Promedio: ' + str(company_name['average_rating']))
         print('Total de peliculas: ' + str(lt.size(company_name['movies'])))
         iterator = it.newIterator(company_name['movies'])
@@ -63,6 +63,21 @@ def printCompanyData(company_name):
             print('Titulo: ' + movie['original_title'])
     else:
         print('No se encontro el autor')
+
+def printDirectorData(director_name):
+    """
+    Imprime las peliculas de un director determinado
+    """
+    if director_name:
+        print('director encontrado: ' + director_name['name'])
+        print('Promedio: ' + str(director_name['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(director_name['movies'])))
+        iterator = it.newIterator(director_name['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el director')
 
 # ___________________________________________________
 #  Menu principal
@@ -94,20 +109,26 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
-        controller.loadData(cont, Detailsfile, Castingfile)
+        lista_unida=controller.loadData(cont, Detailsfile, Castingfile)
+        controller.funciones(cont,lista_unida)
         print('Peliculas cargadas: ' + str(controller.moviesSize(cont)))
-        print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
+        #print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
            
 
     elif int(inputs[0]) == 3:
-        t1_start = process_time() #Inicio de cronometro 
-        company_name=input("Ingrese el nombre de la productora: \n")
+
+        t1_start = process_time() #Inicio de cronometro
+        company_name=input("ingrese el nombre de la productora: \n")
         company_info=controller.getMoviesByCompany(cont,company_name)
         printCompanyData(company_info)
         t1_stop = process_time() #tiempo final
         print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+
     elif int(inputs[0]) == 4:
-        pass
+        director_name=input("ingrese el nombre del director que desea conocer:\n")
+        director_info=controller.getMoviesByDirector(cont,director_name)
+        printDirectorData(director_info)
+ 
 
     elif int(inputs[0]) == 5:
         pass
@@ -116,5 +137,6 @@ while True:
     elif int(inputs[0]) == 7:
         pass
     else:
+        print ("Muchas gracias. ")
         sys.exit(0)
 sys.exit(0)
