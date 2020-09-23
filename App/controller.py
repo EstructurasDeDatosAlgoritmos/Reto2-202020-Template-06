@@ -24,6 +24,9 @@ import config as cf
 from App import model
 from time import process_time 
 import csv
+from DISClib.ADT import list as lt
+from DISClib.DataStructures import listiterator as it
+
 
 
 """
@@ -59,11 +62,33 @@ def loadData(catalog, Detailsfile, Castingfile):
     """
     Carga los datos de los archivos en el modelo
     """
-    t1_start = process_time()
-    loadDetails(catalog, Detailsfile)
-    loadCasting(catalog, Castingfile)
-    t1_stop = process_time()
-    print ("Tiempo de ejecución: ",t1_stop-t1_start, " segundos.")
+    list_unida=lt.newList("ARRAY_LIST",None)
+    list_details=loadDetails(catalog, Detailsfile)
+    list_casting=loadCasting(catalog, Castingfile)
+    it1=it.newIterator(list_details)
+    while it.hasNext(it1):
+        movie=it.next(it1)
+        it2=it.newIterator(list_casting)
+        while it.hasNext(it2):
+            peli=it.next(it2)
+            if movie["id"]==peli["id"]:
+                union={**movie,**peli}
+                lt.addLast(list_unida,union)
+                break
+    return list_unida
+
+def funciones(catalog,lista_unida):
+    it1=it.newIterator(lista_unida)
+    while it.hasNext(it1):
+        movie=it.next(it1)
+        model.addMovie(catalog,movie)
+        companies=movie["production_companies"].split(",")
+        for company in companies:
+            model.addMovieCompany(catalog,company,movie)
+        model.addMovieDirector(catalog,movie["director_name"],movie)
+        model.addMovieGenres(catalog,movie["genres"], movie)
+        model.addMovieCountry(catalog,movie["production_countries"],movie)
+
 
 def loadDetails(catalog, Detailsfile):
     """
@@ -72,20 +97,22 @@ def loadDetails(catalog, Detailsfile):
     - Por cada libro se encuentran sus autores y por cada
       autor, se crea una lista con sus libros
     """
-
-    moviesfile = cf.data_dir + Detailsfile
+    list_Details=lt.newList("ARRAY_LIST",None)
+    #Detailsfile = cf.data_dir + Detailsfile
     input_file = csv.DictReader(open(Detailsfile, encoding='utf-8-sig'), delimiter=";")
     for movie in input_file:
-        model.addMovie(catalog, movie)
-        companies = movie['production_companies'].split(",")  # Se obtienen los autores
-        for company in companies:
-            model.addMovieCompany(catalog, company.strip(), movie)
+        lt.addLast(list_Details,movie)
 
+    return list_Details
         
 
 def loadCasting(catalog, Castingfile):
-    pass
-
+    list_Casting=lt.newList("ARRAY_LIST",None)
+    #Castingfile = cf.data_dir + Castingfile
+    input_file = csv.DictReader(open(Castingfile, encoding='utf-8-sig'), delimiter=";")
+    for movie in input_file:
+        lt.addLast(list_Casting,movie)
+    return list_Casting
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
@@ -102,8 +129,24 @@ def firstANDlast_details(catalog):
 
 def getMoviesByCompany(catalog, company_name):
     """
-    Retorna los libros de un autor
+    Retorna las peliculas de una compañia
     """
     companyinfo = model.getMoviesByCompany(catalog, company_name)
-    t1_stop = process_time() #Inicio de cronometro
     return companyinfo
+
+def getMoviesByDirector(catalog, director_name):
+    """
+    Retorna las peliculas de un director
+    """
+    directorinfo = model.getMoviesByDirector(catalog, director_name)
+    return directorinfo
+def getMoviesByCountry(catalog, country_name):
+    """
+    Retorna las peliculas de un pais
+    """
+    countryinfo = model.getMoviesByCountry(catalog, country_name)
+    return countryinfo
+
+def getMoviesByGenres(catalog, genres_name):
+    genreinfo = model.getMoviesByGenres(catalog, genres_name)
+    return genreinfo

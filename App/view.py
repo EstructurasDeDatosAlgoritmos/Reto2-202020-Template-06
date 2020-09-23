@@ -49,20 +49,63 @@ Detailsfile = 'Data/SmallMoviesDetailsCleaned.csv'
 #  el controlador.
 # ___________________________________________________
 
-def printCompanyData(company_name):
+def printCompanyData(company):
     """
     Imprime los libros de un autor determinado
     """
-    if company_name:
-        print('Compañia encontrado: ' + company_name['name'])
-        print('Promedio: ' + str(company_name['average_rating']))
-        print('Total de peliculas: ' + str(lt.size(company_name['movies'])))
-        iterator = it.newIterator(company_name['movies'])
+    if company:
+        print('Compañia encontrado: ' + company['name'])
+        print('Promedio: ' + str(company['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(company['movies'])))
+        iterator = it.newIterator(company['movies'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
             print('Titulo: ' + movie['original_title'])
     else:
-        print('No se encontro el autor')
+        print('No se encontro la compañia')
+
+def printDirectorData(director):
+    """
+    Imprime las peliculas de un director determinado
+    """
+    if director:
+        print('director encontrado: ' + director['name'])
+        print('Promedio: ' + str(director['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(director['movies'])))
+        iterator = it.newIterator(director['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el director')
+
+def printGenresData(genres):
+    if genres:
+        print('Genero encontrado: ' +genres['name'])
+        print('Promedio de votos: ' + str(genres['average_count']))
+        print('Total de peliculas: ' + str(lt.size(genres['movies'])))
+        iterator = it.newIterator(genres['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print ('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontró el género.')
+
+def printCountryData(country):
+    """
+    Imprime las peliculas de un director determinado
+    """
+    if country:
+        print('pais encontrado: ' + country['name'])
+        print('Promedio: ' + str(country['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(country['movies'])))
+        iterator = it.newIterator(country['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title']+"año de produccion: "+movie['release_date'])
+            print("Director: "+movie["director_name"])
+    else:
+        print('No se encontro el director')
 
 # ___________________________________________________
 #  Menu principal
@@ -94,28 +137,35 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
-        controller.loadData(cont, Detailsfile, Castingfile)
+        lista_unida=controller.loadData(cont, Detailsfile, Castingfile)
+        controller.funciones(cont,lista_unida)
         print('Peliculas cargadas: ' + str(controller.moviesSize(cont)))
-        print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
+        #print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
            
 
     elif int(inputs[0]) == 3:
         t1_start = process_time() #Inicio de cronometro
         company_name=input("ingrese el nombre de la productora: \n")
         company_info=controller.getMoviesByCompany(cont,company_name)
-        printCompanyData(company_info) 
-        
-        t1_stop = process_time() #tiempo final
-        print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+        printCompanyData(company_info)
 
     elif int(inputs[0]) == 4:
-        pass
-
+        director_name=input("ingrese el nombre del director que desea conocer:\n")
+        director_info=controller.getMoviesByDirector(cont,director_name)
+        printDirectorData(director_info)
+ 
     elif int(inputs[0]) == 5:
         pass
+
     elif int(inputs[0]) == 6:
-        pass
-    else:
+        genres_name = input("Ingrese el género: \n")
+        genres_info = controller.getMoviesByGenres(cont, genres_name)
+        printGenresData(genres_info)
+    elif int(inputs[0]) == 7:
+        country_name=input("ingrese el nombre del pais que desea conocer:\n ")
+        country_info=controller.getMoviesByCountry(cont,country_name)
+        printCountryData(country_info)
+    elif int(inputs[0]) == 0:
         print ("Muchas gracias. ")
         sys.exit(0)
 sys.exit(0)
