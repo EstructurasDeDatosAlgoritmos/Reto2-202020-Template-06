@@ -49,7 +49,7 @@ def newCatalog():
                "companies":None,
                "director":None,
                "genres": None,
-               "countries": None}
+               "countries": None,
                "director":None}
     catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
     catalog['companies'] = mp.newMap(200,

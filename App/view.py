@@ -105,7 +105,7 @@ def printCountryData(country):
             print('Titulo: ' + movie['original_title']+"año de produccion: "+movie['release_date'])
             print("Director: "+movie["director_name"])
     else:
-        print('No se encontro el director')
+        print('No se encontro el pais')
 
 def printDirectorData(director_name):
     """
