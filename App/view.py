@@ -49,33 +49,49 @@ Detailsfile = 'Data/SmallMoviesDetailsCleaned.csv'
 #  el controlador.
 # ___________________________________________________
 
-def printCompanyData(company_name):
+def printCompanyData(company):
     """
     Imprime los libros de un autor determinado
     """
-    if company_name:
+    if company:
         print('Compañia encontrado: ' + company_name['name'])
-        print('Promedio: ' + str(company_name['average_rating']))
-        print('Total de peliculas: ' + str(lt.size(company_name['movies'])))
-        iterator = it.newIterator(company_name['movies'])
+        print('Promedio: ' + str(company['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(company['movies'])))
+        iterator = it.newIterator(company['movies'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
             print('Titulo: ' + movie['original_title'])
     else:
-        print('No se encontro el autor')
+        print('No se encontro la compañia')
 
-def printDirectorData(director_name):
+def printDirectorData(director):
     """
     Imprime las peliculas de un director determinado
     """
-    if director_name:
-        print('director encontrado: ' + director_name['name'])
-        print('Promedio: ' + str(director_name['average_rating']))
-        print('Total de peliculas: ' + str(lt.size(director_name['movies'])))
-        iterator = it.newIterator(director_name['movies'])
+    if director:
+        print('director encontrado: ' + director['name'])
+        print('Promedio: ' + str(director['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(director['movies'])))
+        iterator = it.newIterator(director['movies'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
             print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el director')
+
+def printCountryData(country):
+    """
+    Imprime las peliculas de un director determinado
+    """
+    if country:
+        print('pais encontrado: ' + country['name'])
+        print('Promedio: ' + str(country['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(country['movies'])))
+        iterator = it.newIterator(country['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title']+"año de produccion: "+movie['release_date'])
+            print("Director: "+movie["director_name"]\n)
     else:
         print('No se encontro el director')
 
@@ -130,7 +146,9 @@ while True:
     elif int(inputs[0]) == 5:
         pass
     elif int(inputs[0]) == 6:
-        pass
+        country_name=input("ingrese el nombre del pais que desea conocer:\n ")
+        country_info=controller.getMoviesByCountry(cont,country_name)
+        printCountryData(country_info)
     else:
         print ("Muchas gracias. ")
         sys.exit(0)
