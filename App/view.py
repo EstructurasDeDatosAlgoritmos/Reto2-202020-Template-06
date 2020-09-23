@@ -113,6 +113,8 @@ while True:
         pass
     elif int(inputs[0]) == 6:
         pass
+    elif int(inputs[0]) == 7:
+        pass
     else:
         sys.exit(0)
 sys.exit(0)
