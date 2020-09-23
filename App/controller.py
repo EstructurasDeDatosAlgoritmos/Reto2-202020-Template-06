@@ -22,6 +22,7 @@
 
 import config as cf
 from App import model
+from time import process_time 
 import csv
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
@@ -45,7 +46,10 @@ def initCatalog():
     Llama la funcion de inicializacion del catalogo del modelo.
     """
     # catalog es utilizado para interactuar con el modelo
+    t1_start = process_time()
     catalog = model.newCatalog()
+    t1_stop = process_time()
+    print ("Tiempo de ejecución ",t1_stop-t1_start, " segundos.")
     return catalog
 
 

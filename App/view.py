@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller
+from time import process_time 
 assert config
 
 """
@@ -53,7 +54,7 @@ def printCompanyData(company_name):
     Imprime los libros de un autor determinado
     """
     if company_name:
-        print('compañia encontrado: ' + company_name['name'])
+        print('Compañia encontrado: ' + company_name['name'])
         print('Promedio: ' + str(company_name['average_rating']))
         print('Total de peliculas: ' + str(lt.size(company_name['movies'])))
         iterator = it.newIterator(company_name['movies'])
@@ -115,6 +116,7 @@ while True:
            
 
     elif int(inputs[0]) == 3:
+        t1_start = process_time() #Inicio de cronometro
         company_name=input("ingrese el nombre de la productora: \n")
         company_info=controller.getMoviesByCompany(cont,company_name)
         printCompanyData(company_info)
@@ -130,5 +132,6 @@ while True:
     elif int(inputs[0]) == 6:
         pass
     else:
+        print ("Muchas gracias. ")
         sys.exit(0)
 sys.exit(0)
