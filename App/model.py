@@ -23,6 +23,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
+
 assert config
 
 """
@@ -45,12 +46,18 @@ def newCatalog():
     """
     catalog = {'movies': None,
                'moviesIds': None,
-               "companies":None}
+               "companies":None,
+               "director":None}
     catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
     catalog['companies'] = mp.newMap(200,
                                    maptype='PROBING',
                                    loadfactor=0.4,
                                    comparefunction=compareCompaniesByName)
+    catalog['directors'] = mp.newMap(200,
+                                   maptype='PROBING',
+                                   loadfactor=0.4,
+                                   comparefunction=compareDirectorsByName)
+    
     catalog['moviesIds'] = mp.newMap(200,
                                    maptype='PROBING',
                                    loadfactor=0.4,
@@ -70,9 +77,9 @@ def newProduction_company(name):
 
 def addMovieCompany(catalog, company_name, movie):
     """
-    Esta función adiciona un libro a la lista de libros publicados
-    por un autor.
-    Cuando se adiciona el libro se actualiza el promedio de dicho autor
+    Esta función adiciona una pelicula a la lista de peliculas publicadas
+    por una compañia.
+    Cuando se adiciona la pelicula se actualiza el promedio de dicha compañia
     """
     companies = catalog['companies']
     existauthor = mp.contains(companies, company_name)
@@ -91,17 +98,38 @@ def addMovieCompany(catalog, company_name, movie):
     else:
         company['average_rating'] = (company_avg + float(movie_avg)) / 2
 
-
-# Funciones para agregar informacion al catalogo
-def addMovie(catalog, Movie):
+def newDirector(name):
     """
-    Esta funcion adiciona una pelicula a la lista de peliculas,
-    adicionalmente lo guarda en un Map usando como llave su Id.
+    Crea una nueva estructura para modelar las peliculas de una compañia
+    y su promedio de ratings
     """
-    lt.addLast(catalog['movies'], Movie)
-    
-    mp.put(catalog['moviesIds'], Movie["id"], Movie)
+    director = {'name': "", "movies": None,  "average_rating": 0}    
+    director['name'] = name
+    director['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
+    return director
 
+def addMovieDirector(catalog, director_name, movie):
+    """
+    Esta función adiciona una pelicula a la lista de peliculas publicados
+    por un director.
+    Cuando se adiciona la pelicula se actualiza el promedio de dicho director
+    """
+    directors = catalog['directors']
+    existauthor = mp.contains(directors, director_name)
+    if existauthor:
+        entry = mp.get(directors, director_name)
+        director = me.getValue(entry)
+    else:
+        director = newDirector(director_name)
+        mp.put(directors, director_name, director)
+    lt.addLast(director['movies'], movie)
+
+    director_avg = director['average_rating']
+    movie_avg=movie["vote_average"]
+    if (director_avg == 0.0):
+        director['average_rating'] = float(movie_avg)
+    else:
+        director['average_rating'] = (director_avg + float(movie_avg)) / 2
 
 
 # Funciones para agregar informacion al catalogo
@@ -119,36 +147,6 @@ def addMovie(catalog, Movie):
 # Funciones de consulta
 # ==============================
 
-def getFirstAndLastDetails(catalog):
-    lista_movies = catalog['movies']
-    
-    first = lt.firstElement(lista_movies)
-    last = lt.lastElement(lista_movies)
-    
-    #Titulo
-    f_name = first["original_title"]
-    l_name = last["original_title"]
-    
-    #Fecha
-    f_date = first["release_date"]
-    l_date = last["release_date"]
-    #Average
-    f_average = first["vote_average"]
-    l_average = last["vote_average"]
-    #Count
-    f_count = first["vote_count"]
-    l_count = last["vote_count"]
-    #Promedio
-    f_promedio = float(f_average) / int(f_count)
-    l_promedio = float(l_average) / int(l_count)
-    #Language
-    f_language = first["spoken_languages"]
-    l_language = last["spoken_languages"]
-    First = "\n" +"Primera pelicula:\n" + "Titulo:" + str(f_name) + "\n" + "Fecha:" + str(f_date) + "\n" + "Promedio:" + str(f_average) + "\n" + "Numero de votos:" + str(f_count) + "\n" + "Idioma:" + str(f_language) + "\n\n"
-    Last = "\n" +"Ultima pelicula:\n" + "Titulo:" + str(l_name) + "\n" + "Fecha:" + str(l_date) + "\n" + "Promedio:" + str(l_average) + "\n" + "Numero de votos:" + str(l_count) + "\n" + "Idioma:" + str(l_language) + "\n\n"
-    Details = First + Last
-    return Details  
-
 def moviesSize(catalog):
     """
     Número de libros en el catago
@@ -164,6 +162,14 @@ def getMoviesByCompany(catalog, company_name):
         return me.getValue(company)
     return None
 
+def getMoviesByDirector(catalog, director_name):
+    """
+    Retorna un director con sus libropeliculass a partir del nombre del director
+    """
+    director = mp.get(catalog['directors'], director_name)
+    if director:
+        return me.getValue(director)
+    return None
 # ==============================
 # Funciones de Comparacion
 # ==============================
@@ -215,6 +221,19 @@ def compareMapMoviesIds(id, entry):
     if (int(id) == int(identry)):
         return 0
     elif (int(id) > int(identry)):
+        return 1
+    else:
+        return -1
+
+def compareDirectorsByName(keyname, director):
+    """
+    Compara dos nombres de autor. El primero es una cadena
+    y el segundo un entry de un map
+    """
+    dicentry = me.getKey(director)
+    if (keyname == dicentry):
+        return 0
+    elif (keyname > dicentry):
         return 1
     else:
         return -1

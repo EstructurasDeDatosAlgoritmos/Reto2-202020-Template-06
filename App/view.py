@@ -63,6 +63,21 @@ def printCompanyData(company_name):
     else:
         print('No se encontro el autor')
 
+def printDirectorData(director_name):
+    """
+    Imprime las peliculas de un director determinado
+    """
+    if director_name:
+        print('director encontrado: ' + director_name['name'])
+        print('Promedio: ' + str(director_name['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(director_name['movies'])))
+        iterator = it.newIterator(director_name['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el director')
+
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
@@ -93,9 +108,10 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
-        controller.loadData(cont, Detailsfile, Castingfile)
+        lista_unida=controller.loadData(cont, Detailsfile, Castingfile)
+        controller.funciones(cont,lista_unida)
         print('Peliculas cargadas: ' + str(controller.moviesSize(cont)))
-        print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
+        #print("Detalles de la primera y ultima pelicula: \n" + controller.firstANDlast_details(cont))
            
 
     elif int(inputs[0]) == 3:
@@ -103,10 +119,11 @@ while True:
         company_info=controller.getMoviesByCompany(cont,company_name)
         printCompanyData(company_info)
 
-        pass
-
     elif int(inputs[0]) == 4:
-        pass
+        director_name=input("ingrese el nombre del director que desea conocer:\n")
+        director_info=controller.getMoviesByDirector(cont,director_name)
+        printDirectorData(director_info)
+ 
 
     elif int(inputs[0]) == 5:
         pass
