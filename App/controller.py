@@ -76,23 +76,26 @@ def loadData(catalog, Detailsfile, Castingfile):
                 union={**movie,**peli}
                 lt.addLast(list_unida,union)
                 break
-    print(list_unida["elements"][1])
     return list_unida
 
 def funciones(catalog,lista_unida):
     it1=it.newIterator(lista_unida)
     while it.hasNext(it1):
         movie=it.next(it1)
+        model.addMovie(catalog,movie)
         companies=movie["production_companies"].split(",")
         for company in companies:
             model.addMovieCompany(catalog,company,movie)
         model.addMovieDirector(catalog,movie["director_name"],movie)
+
         model.addMovieActor(catalog,movie["actor1_name"],movie)
         model.addMovieActor(catalog,movie["actor2_name"],movie)
         model.addMovieActor(catalog,movie["actor3_name"],movie)
         model.addMovieActor(catalog,movie["actor4_name"],movie)
         model.addMovieActor(catalog,movie["actor5_name"],movie)
         #model.directoresDEactores(catalog)
+        model.addMovieGenres(catalog,movie["genres"], movie)
+        model.addMovieCountry(catalog,movie["production_countries"],movie)
 
 
 
@@ -146,6 +149,16 @@ def getMoviesByDirector(catalog, director_name):
     """
     directorinfo = model.getMoviesByDirector(catalog, director_name)
     return directorinfo
+def getMoviesByCountry(catalog, country_name):
+    """
+    Retorna las peliculas de un pais
+    """
+    countryinfo = model.getMoviesByCountry(catalog, country_name)
+    return countryinfo
+
+def getMoviesByGenres(catalog, genres_name):
+    genreinfo = model.getMoviesByGenres(catalog, genres_name)
+    return genreinfo
 
 def getMoviesByActor(catalog, actor_name):
     """

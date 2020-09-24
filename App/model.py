@@ -48,6 +48,9 @@ def newCatalog():
     catalog = {'movies': None,
                'moviesIds': None,
                "companies":None,
+               "director":None,
+               "genres": None,
+               "countries": None,
                "director":None}
     catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
     catalog['companies'] = mp.newMap(200,
@@ -58,17 +61,30 @@ def newCatalog():
                                    maptype='PROBING',
                                    loadfactor=0.4,
                                    comparefunction=compareDirectorsByName)
+
     catalog['actors'] = mp.newMap(200,
                                    maptype='PROBING',
                                    loadfactor=0.4,
                                    comparefunction=compareActorsByName)
     #catalog['Dir_act'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
+
+    catalog['countries'] = mp.newMap(200,
+                                   maptype='PROBING',
+                                   loadfactor=0.4,
+                                   comparefunction=compareCountriesByName)
+    catalog['genres'] = mp.newMap(200,
+                                maptype = 'PROBING',
+                                loadfactor = 0.4,
+                                comparefunction = compareGenresByName)
+    
+
     catalog['moviesIds'] = mp.newMap(200,
                                    maptype='CHAINING',
                                    loadfactor=0.7,
                                    comparefunction=compareMapMoviesIds)
     return catalog
 
+# requisito 1
 
 def newProduction_company(name):
     """
@@ -103,6 +119,9 @@ def addMovieCompany(catalog, company_name, movie):
     else:
         company['average_rating'] = (company_avg + float(movie_avg)) / 2
 
+
+# requisito 2
+
 def newDirector(name):
     """
     Crea una nueva estructura para modelar las peliculas de una compañia
@@ -112,6 +131,88 @@ def newDirector(name):
     director['name'] = name
     director['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
     return director
+
+def addMovieDirector(catalog, director_name, movie):
+    """
+    Esta función adiciona una pelicula a la lista de peliculas publicados
+    por un director.
+    Cuando se adiciona la pelicula se actualiza el promedio de dicho director
+    """
+    directors = catalog['directors']
+    existauthor = mp.contains(directors, director_name)
+    if existauthor:
+        entry = mp.get(directors, director_name)
+        director = me.getValue(entry)
+    else:
+        director = newDirector(director_name)
+        mp.put(directors, director_name, director)
+    lt.addLast(director['movies'], movie)
+
+    director_avg = director['average_rating']
+    movie_avg=movie["vote_average"]
+    if (director_avg == 0.0):
+        director['average_rating'] = float(movie_avg)
+    else:
+        director['average_rating'] = (director_avg + float(movie_avg)) / 2
+#requisito 6
+def newGenres(name):
+    genres = {'name': "", 'movies': None, "average_count": 0}
+    genres['name'] = name
+    genres['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
+    return genres
+
+def addMovieGenres(catalog, genres_name, movie):
+    genre = catalog['genres']
+    existgenre = mp.contains(genre, genres_name)
+    if existgenre:
+        entry = mp.get(genre, genres_name)
+        genres = me.getValue(entry)
+    else:
+        genres =newGenres(genres_name)
+        mp.put(genre, genres_name, genres)
+    lt.addLast(genres['movies'], movie)
+
+    genre_cou = genres['average_count']
+    movie_avg = movie['vote_count']
+    if (genre_cou == 0.0):
+        genres['average_count'] = float(movie_avg)
+    else:
+        genres['average_count'] = (genre_cou + float(movie_avg))/2
+
+#requisito 5
+def newCountry(name):
+    """
+    Crea una nueva estructura para modelar las peliculas de un pais
+    y su promedio de ratings
+    """
+    country = {'name': "", "movies": None,  "average_rating": 0}    
+    country['name'] = name
+    country['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
+    return country
+
+def addMovieCountry(catalog, country_name, movie):
+    """
+    Esta función adiciona una pelicula a la lista de peliculas publicados
+    por un director.
+    Cuando se adiciona la pelicula se actualiza el promedio de dicho director
+    """
+    countries = catalog['countries']
+    existcountry = mp.contains(countries, country_name)
+    if existcountry:
+        entry = mp.get(countries, country_name)
+        country = me.getValue(entry)
+    else:
+        country = newCountry(country_name)
+        mp.put(countries, country_name, country)
+    lt.addLast(country['movies'], movie)
+
+    country_avg = country['average_rating']
+    movie_avg=movie["vote_average"]
+    if (country_avg == 0.0):
+        country['average_rating'] = float(movie_avg)
+    else:
+        country['average_rating'] = (country_avg + float(movie_avg)) / 2
+
 
 def addMovieDirector(catalog, director_name, movie):
     """
@@ -234,6 +335,7 @@ def getMoviesByDirector(catalog, director_name):
         return me.getValue(director)
     return None
 
+
 def getMoviesByActor(catalog, actor_name):
     """
     Retorna un actor con sus peliculas a partir del nombre del director
@@ -249,6 +351,22 @@ def getDir_Act(catalog):
 
     return lt.firstElement(catalog['Dir_act'])
 """
+
+def getMoviesByGenres(catalog, genres_name):
+    genre = mp.get(catalog['genres'], genres_name)
+    if genre:
+        return me.getValue(genre)
+    return None
+
+def getMoviesByCountry(catalog, country_name):
+    """
+    Retorna un pais con sus peliculas a partir del nombre del pais
+    """
+    country = mp.get(catalog['countries'], country_name)
+    if country:
+        return me.getValue(country)
+    return None
+
 # ==============================
 # Funciones de Comparacion
 # ==============================
@@ -291,19 +409,6 @@ def compareCompaniesByName(keyname, company):
     else:
         return -1
 
-def compareMapMoviesIds(id, entry):
-    """
-    Compara dos ids de libros, id es un identificador
-    y entry una pareja llave-valor
-    """
-    identry = me.getKey(entry)
-    if (int(id) == int(identry)):
-        return 0
-    elif (int(id) > int(identry)):
-        return 1
-    else:
-        return -1
-
 def compareDirectorsByName(keyname, director):
     """
     Compara dos nombres de autor. El primero es una cadena
@@ -313,6 +418,28 @@ def compareDirectorsByName(keyname, director):
     if (keyname == dicentry):
         return 0
     elif (keyname > dicentry):
+        return 1
+    else:
+        return -1
+
+def compareGenresByName(keyname, genres):
+    gentry = me.getKey(genres)
+    if (keyname == gentry):
+        return 0
+    elif (keyname > gentry):
+        return 1
+    else:
+        return -1
+
+def compareCountriesByName(keyname, country):
+    """
+    Compara dos nombres de paises. El primero es una cadena
+    y el segundo un entry de un map
+    """
+    counentry = me.getKey(country)
+    if (keyname == counentry):
+        return 0
+    elif (keyname > counentry):
         return 1
     else:
         return -1
