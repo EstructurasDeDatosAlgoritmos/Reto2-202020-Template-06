@@ -23,6 +23,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
+from DISClib.DataStructures import listiterator as it
 
 assert config
 
@@ -57,7 +58,11 @@ def newCatalog():
                                    maptype='PROBING',
                                    loadfactor=0.4,
                                    comparefunction=compareDirectorsByName)
-    
+    catalog['actors'] = mp.newMap(200,
+                                   maptype='PROBING',
+                                   loadfactor=0.4,
+                                   comparefunction=compareActorsByName)
+    #catalog['Dir_act'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
     catalog['moviesIds'] = mp.newMap(200,
                                    maptype='CHAINING',
                                    loadfactor=0.7,
@@ -132,6 +137,64 @@ def addMovieDirector(catalog, director_name, movie):
         director['average_rating'] = (director_avg + float(movie_avg)) / 2
 
 
+def newActor(name):
+    """
+    Crea una nueva estructura para modelar las peliculas de una compañia
+    y su promedio de ratings
+    """
+    actor = {'name': "", "movies": None,  "average_rating": 0}    
+    actor['name'] = name
+    actor['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
+    return actor
+
+def addMovieActor(catalog, actor_name, movie):
+    """
+    Esta función adiciona una pelicula a la lista de peliculas en la que participó
+    un actor.
+    Cuando se adiciona la pelicula se actualiza el promedio de dicho actor
+    """
+    actors = catalog['actors']
+    existactor = mp.contains(actors, actor_name)
+    if existactor:
+        entry = mp.get(actors, actor_name)
+        actor = me.getValue(entry)
+    else:
+        actor = newActor(actor_name)
+        mp.put(actors, actor_name, actor)
+    lt.addLast(actor['movies'], movie)
+
+    actor_avg = actor['average_rating']
+    movie_avg=movie["vote_average"]
+    if (actor_avg == 0.0):
+        actor['average_rating'] = float(movie_avg)
+    else:
+        actor['average_rating'] = (actor_avg + float(movie_avg)) / 2
+"""
+def directoresDEactores(catalog):
+    actors = catalog['actors']
+    iterador = it.newIterator(actors)
+    cont = 0
+    directorM = None
+    colab = 0
+    tam = lt.size(actors)
+    while it.hasNext(iterador):
+        pelicula = it.next(iterador)
+        director = pelicula["director_name"]
+        i = 0
+        c = False
+
+        elemento = lt.getElement(director,i)
+        while i < tam:
+            if i == 0:
+                i +=1
+            elif director == elemento:
+                cont +=1
+                i+=1
+        if cont > colab:
+            directorM = director
+        cont = 0
+    lt.addLast(catalog["Dir_act"])
+"""
 # Funciones para agregar informacion al catalogo
 def addMovie(catalog, Movie):
     """
@@ -155,7 +218,7 @@ def moviesSize(catalog):
 
 def getMoviesByCompany(catalog, company_name):
     """
-    Retorna un autor con sus libros a partir del nombre del autor
+    Retorna una productora con sus peliculas a partir del nombre del autor
     """
     company = mp.get(catalog['companies'], company_name)
     if company:
@@ -164,12 +227,28 @@ def getMoviesByCompany(catalog, company_name):
 
 def getMoviesByDirector(catalog, director_name):
     """
-    Retorna un director con sus libropeliculass a partir del nombre del director
+    Retorna un director con sus peliculas a partir del nombre del director
     """
     director = mp.get(catalog['directors'], director_name)
     if director:
         return me.getValue(director)
     return None
+
+def getMoviesByActor(catalog, actor_name):
+    """
+    Retorna un actor con sus peliculas a partir del nombre del director
+    """
+    actor = mp.get(catalog['actors'], actor_name)
+    if actor:
+        return me.getValue(actor)
+    return None
+"""
+def getDir_Act(catalog):
+    
+    Número de libros en el catago
+
+    return lt.firstElement(catalog['Dir_act'])
+"""
 # ==============================
 # Funciones de Comparacion
 # ==============================
@@ -201,7 +280,7 @@ def compareMapMoviesIds(id, entry):
 
 def compareCompaniesByName(keyname, company):
     """
-    Compara dos nombres de autor. El primero es una cadena
+    Compara dos nombres de productoras. El primero es una cadena
     y el segundo un entry de un map
     """
     comentry = me.getKey(company)
@@ -234,6 +313,19 @@ def compareDirectorsByName(keyname, director):
     if (keyname == dicentry):
         return 0
     elif (keyname > dicentry):
+        return 1
+    else:
+        return -1
+
+def compareActorsByName(keyname, actor):
+    """
+    Compara dos nombres de autor. El primero es una cadena
+    y el segundo un entry de un map
+    """
+    actorentry = me.getKey(actor)
+    if (keyname == actorentry):
+        return 0
+    elif (keyname > actorentry):
         return 1
     else:
         return -1
