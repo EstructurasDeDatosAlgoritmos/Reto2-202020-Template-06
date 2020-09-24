@@ -68,6 +68,7 @@ def loadData(catalog, Detailsfile, Castingfile):
     it1=it.newIterator(list_details)
     while it.hasNext(it1):
         movie=it.next(it1)
+        model.addMovie(catalog,movie)
         it2=it.newIterator(list_casting)
         while it.hasNext(it2):
             peli=it.next(it2)
@@ -86,8 +87,16 @@ def funciones(catalog,lista_unida):
         for company in companies:
             model.addMovieCompany(catalog,company,movie)
         model.addMovieDirector(catalog,movie["director_name"],movie)
+
+        model.addMovieActor(catalog,movie["actor1_name"],movie)
+        model.addMovieActor(catalog,movie["actor2_name"],movie)
+        model.addMovieActor(catalog,movie["actor3_name"],movie)
+        model.addMovieActor(catalog,movie["actor4_name"],movie)
+        model.addMovieActor(catalog,movie["actor5_name"],movie)
+        #model.directoresDEactores(catalog)
         model.addMovieGenres(catalog,movie["genres"], movie)
         model.addMovieCountry(catalog,movie["production_countries"],movie)
+
 
 
 def loadDetails(catalog, Detailsfile):
@@ -150,4 +159,16 @@ def getMoviesByCountry(catalog, country_name):
 def getMoviesByGenres(catalog, genres_name):
     genreinfo = model.getMoviesByGenres(catalog, genres_name)
     return genreinfo
+
+def getMoviesByActor(catalog, actor_name):
+    """
+    Retorna las peliculas de un director
+    """
+    actorinfo = model.getMoviesByActor(catalog, actor_name)
+    return actorinfo
+"""
+def getDir_Act(catalog):
+
+    return model.getDir_Act(catalog)
+"""
 

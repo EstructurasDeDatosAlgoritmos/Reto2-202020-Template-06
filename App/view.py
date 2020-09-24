@@ -112,7 +112,7 @@ def printDirectorData(director_name):
     Imprime las peliculas de un director determinado
     """
     if director_name:
-        print('director encontrado: ' + director_name['name'])
+        print('Director encontrado: ' + director_name['name'])
         print('Promedio: ' + str(director_name['average_rating']))
         print('Total de peliculas: ' + str(lt.size(director_name['movies'])))
         iterator = it.newIterator(director_name['movies'])
@@ -121,6 +121,22 @@ def printDirectorData(director_name):
             print('Titulo: ' + movie['original_title'])
     else:
         print('No se encontro el director')
+
+def printActorData(actor_name):
+    """
+    Imprime las peliculas de un director determinado
+    """
+    if actor_name:
+        print('Actor encontrado: ' + actor_name['name'])
+        print('Promedio: ' + str(actor_name['average_rating']))
+        print('Total de peliculas: ' + str(lt.size(actor_name['movies'])))
+        #print('Director con mas colaboraciónes: ' + str(directorM))
+        iterator = it.newIterator(actor_name['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'])
+    else:
+        print('No se encontro el actor')
 
 # ___________________________________________________
 #  Menu principal
@@ -133,7 +149,7 @@ def printMenu():
     print("4- Conocer a un director")
     print("5- Conocer a un actor ")
     print("6- Entender un género cinematográfico")
-    print("7-  Encontrar películas por país")
+    print("7- Encontrar películas por país")
     print("0- Salir")
 
 
@@ -161,18 +177,22 @@ while True:
     elif int(inputs[0]) == 3:
 
         t1_start = process_time() #Inicio de cronometro
-        company_name=input("ingrese el nombre de la productora: \n")
+        company_name=input("Ingrese el nombre de la productora: \n")
         company_info=controller.getMoviesByCompany(cont,company_name)
         printCompanyData(company_info)
 
     elif int(inputs[0]) == 4:
-        director_name=input("ingrese el nombre del director que desea conocer:\n")
+        director_name=input("Ingrese el nombre del director que desea conocer:\n")
         director_info=controller.getMoviesByDirector(cont,director_name)
         printDirectorData(director_info)
  
 
     elif int(inputs[0]) == 5:
-        pass
+
+        actor_name=input("Ingrese el nombre del actor:\n")
+        actor_info=controller.getMoviesByActor(cont,actor_name)
+        #directorM = controller.getDir_Act(cont)
+        printActorData(actor_info)
 
     elif int(inputs[0]) == 6:
         genres_name = input("Ingrese el género: \n")
