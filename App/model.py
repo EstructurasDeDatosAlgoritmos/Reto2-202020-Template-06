@@ -84,7 +84,7 @@ def newCatalog():
                                    comparefunction=compareMapMoviesIds)
     return catalog
 
-# requisito 1
+# Requerimiento 1
 
 def newProduction_company(name):
     """
@@ -120,7 +120,7 @@ def addMovieCompany(catalog, company_name, movie):
         company['average_rating'] = (company_avg + float(movie_avg)) / 2
 
 
-# requisito 2
+# Requirimiento 2
 
 def newDirector(name):
     """
@@ -154,89 +154,8 @@ def addMovieDirector(catalog, director_name, movie):
         director['average_rating'] = float(movie_avg)
     else:
         director['average_rating'] = (director_avg + float(movie_avg)) / 2
-#requisito 6
-def newGenres(name):
-    genres = {'name': "", 'movies': None, "average_count": 0}
-    genres['name'] = name
-    genres['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
-    return genres
-
-def addMovieGenres(catalog, genres_name, movie):
-    genre = catalog['genres']
-    existgenre = mp.contains(genre, genres_name)
-    if existgenre:
-        entry = mp.get(genre, genres_name)
-        genres = me.getValue(entry)
-    else:
-        genres =newGenres(genres_name)
-        mp.put(genre, genres_name, genres)
-    lt.addLast(genres['movies'], movie)
-
-    genre_cou = genres['average_count']
-    movie_avg = movie['vote_count']
-    if (genre_cou == 0.0):
-        genres['average_count'] = float(movie_avg)
-    else:
-        genres['average_count'] = (genre_cou + float(movie_avg))/2
-
-#requisito 5
-def newCountry(name):
-    """
-    Crea una nueva estructura para modelar las peliculas de un pais
-    y su promedio de ratings
-    """
-    country = {'name': "", "movies": None,  "average_rating": 0}    
-    country['name'] = name
-    country['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
-    return country
-
-def addMovieCountry(catalog, country_name, movie):
-    """
-    Esta función adiciona una pelicula a la lista de peliculas publicados
-    por un director.
-    Cuando se adiciona la pelicula se actualiza el promedio de dicho director
-    """
-    countries = catalog['countries']
-    existcountry = mp.contains(countries, country_name)
-    if existcountry:
-        entry = mp.get(countries, country_name)
-        country = me.getValue(entry)
-    else:
-        country = newCountry(country_name)
-        mp.put(countries, country_name, country)
-    lt.addLast(country['movies'], movie)
-
-    country_avg = country['average_rating']
-    movie_avg=movie["vote_average"]
-    if (country_avg == 0.0):
-        country['average_rating'] = float(movie_avg)
-    else:
-        country['average_rating'] = (country_avg + float(movie_avg)) / 2
-
-
-def addMovieDirector(catalog, director_name, movie):
-    """
-    Esta función adiciona una pelicula a la lista de peliculas publicados
-    por un director.
-    Cuando se adiciona la pelicula se actualiza el promedio de dicho director
-    """
-    directors = catalog['directors']
-    existauthor = mp.contains(directors, director_name)
-    if existauthor:
-        entry = mp.get(directors, director_name)
-        director = me.getValue(entry)
-    else:
-        director = newDirector(director_name)
-        mp.put(directors, director_name, director)
-    lt.addLast(director['movies'], movie)
-
-    director_avg = director['average_rating']
-    movie_avg=movie["vote_average"]
-    if (director_avg == 0.0):
-        director['average_rating'] = float(movie_avg)
-    else:
-        director['average_rating'] = (director_avg + float(movie_avg)) / 2
-
+        
+#Requerimiento 3
 
 def newActor(name):
     """
@@ -296,6 +215,67 @@ def directoresDEactores(catalog):
         cont = 0
     lt.addLast(catalog["Dir_act"])
 """
+
+#Requerimiento 4
+def newGenres(name):
+    genres = {'name': "", 'movies': None, "average_count": 0}
+    genres['name'] = name
+    genres['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
+    return genres
+
+def addMovieGenres(catalog, genres_name, movie):
+    genre = catalog['genres']
+    existgenre = mp.contains(genre, genres_name)
+    if existgenre:
+        entry = mp.get(genre, genres_name)
+        genres = me.getValue(entry)
+    else:
+        genres =newGenres(genres_name)
+        mp.put(genre, genres_name, genres)
+    lt.addLast(genres['movies'], movie)
+
+    genre_cou = genres['average_count']
+    movie_avg = movie['vote_count']
+    if (genre_cou == 0.0):
+        genres['average_count'] = float(movie_avg)
+    else:
+        genres['average_count'] = (genre_cou + float(movie_avg))/2
+
+#Requerimiento 5
+def newCountry(name):
+    """
+    Crea una nueva estructura para modelar las peliculas de un pais
+    y su promedio de ratings
+    """
+    country = {'name': "", "movies": None,  "average_rating": 0}    
+    country['name'] = name
+    country['movies'] = lt.newList('SINGLE_LINKED', compareMapMoviesIds)
+    return country
+
+def addMovieCountry(catalog, country_name, movie):
+    """
+    Esta función adiciona una pelicula a la lista de peliculas publicados
+    por un director.
+    Cuando se adiciona la pelicula se actualiza el promedio de dicho director
+    """
+    countries = catalog['countries']
+    existcountry = mp.contains(countries, country_name)
+    if existcountry:
+        entry = mp.get(countries, country_name)
+        country = me.getValue(entry)
+    else:
+        country = newCountry(country_name)
+        mp.put(countries, country_name, country)
+    lt.addLast(country['movies'], movie)
+
+    country_avg = country['average_rating']
+    movie_avg=movie["vote_average"]
+    if (country_avg == 0.0):
+        country['average_rating'] = float(movie_avg)
+    else:
+        country['average_rating'] = (country_avg + float(movie_avg)) / 2
+
+
 # Funciones para agregar informacion al catalogo
 def addMovie(catalog, Movie):
     """
